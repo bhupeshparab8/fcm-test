@@ -38,7 +38,7 @@
 
         function getStartToken() {
             console.log("get start token called");
-            getToken()
+            getToken(messaging, { "vapidKey": "BG9ff0wgZhb8StMVABPrsW55rzYQoY1xZYfpkO5VvWS3EnKlYwcjnJAVbaVHQReWrVPi2zFOLGf242ad8sq9MBk" })
                 .then((currentToken) => {
                     if (currentToken) {
                         //sendTokenToServer(currentToken);
