@@ -10,13 +10,10 @@
 
 <body>
     <h1>Web Push Notification</h1>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+    <script src="https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js"></script>
 
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+    <script>
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -28,17 +25,31 @@
             appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        var app = firebase.initializeApp(firebaseConfig);
 
-        const messaging = getMessaging();
+        const messaging = firebase.messaging();
 
-        //Custom function made to run firebase service 
-        getStartToken();
+        messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
+        })
+
+        function RequestPermission() {
+            console.log('Requesting permission...');
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    // TODO(developer): Retrieve a registration token for use with FCM.
+                    // In many cases once an app has been granted notification permission,
+                    // it should update its UI reflecting this.
+                    getStartToken();
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            });
+        }
 
         function getStartToken() {
-            console.log("get start token called");
-            getToken(messaging, { "vapidKey": "BG9ff0wgZhb8StMVABPrsW55rzYQoY1xZYfpkO5VvWS3EnKlYwcjnJAVbaVHQReWrVPi2zFOLGf242ad8sq9MBk" })
+            messaging.getToken({ "vapidKey": "BG9ff0wgZhb8StMVABPrsW55rzYQoY1xZYfpkO5VvWS3EnKlYwcjnJAVbaVHQReWrVPi2zFOLGf242ad8sq9MBk" })
                 .then((currentToken) => {
                     if (currentToken) {
                         //sendTokenToServer(currentToken);
@@ -55,28 +66,7 @@
                 });
         }
 
-        function sendTokenToServer(token) {
-            // to do if token need to be send to server
-        }
-
-        function RequestPermission() {
-            messaging.requestPermission()
-                .then((permission) => {
-                    if (permission === 'granted') {
-                        console.log("have Permission");
-                        //calls method again and to sent token to server
-                        getStartToken();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        }
-
-        onMessage(messaging, function (payload) {
-            console.log("on Message", payload);
-        });
-
+        getStartToken();
     </script>
 
 </body>
