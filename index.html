@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Push Notification</title>
+</head>
+
+<body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+        import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
+            authDomain: "csp-fcm.firebaseapp.com",
+            projectId: "csp-fcm",
+            storageBucket: "csp-fcm.appspot.com",
+            messagingSenderId: "1063903322339",
+            appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        const messaging = getMessaging();
+
+        function getStartToken() {
+            getToken()
+                .then((currentToken) => {
+                    if (currentToken) {
+                        //sendTokenToServer(currentToken);
+                        console.log("generated token=>", currentToken)
+                    }
+                    else {
+                        // Show permission request.
+                        RequestPermission();
+                        //setTokenSentToServer(false);
+                    }
+                }).catch((err) => {
+                    console.error("getStartToken error=>", err)
+                    //setTokenSentToServer(false);
+                });
+        }
+
+        function sendTokenToServer(token) {
+            // to do if token need to be send to server
+        }
+
+        function RequestPermission() {
+            messaging.requestPermission()
+                .then((permission) => {
+                    if (permission === 'granted') {
+                        console.log("have Permission");
+                        //calls method again and to sent token to server
+                        getStartToken();
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+
+        messaging.onMessage(function (payload) {
+            console.log("on Message", payload);
+        });
+
+    </script>
+
+</body>
+
+</html>
