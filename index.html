@@ -10,13 +10,11 @@
 
 <body>
     <h1>Web Push Notification</h1>
-    <script type="module" src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/7.18.0/firebase-messaging.js"></script>
 
     <script>
 
         // Your web app's Firebase configuration
-        const firebaseConfig = {
+        var firebaseConfig = {
             apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
             authDomain: "csp-fcm.firebaseapp.com",
             projectId: "csp-fcm",
@@ -27,7 +25,7 @@
 
         var app = firebase.initializeApp(firebaseConfig);
 
-        const messaging = firebase.messaging();
+        var messaging = firebase.messaging();
 
         messaging.onMessage((payload) => {
             console.log('Message received. ', payload);
@@ -68,6 +66,10 @@
 
         getStartToken();
     </script>
+
+    <script type="module" src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/7.18.0/firebase-messaging.js"></script>
+
 
 </body>
 
