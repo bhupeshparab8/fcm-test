@@ -33,7 +33,11 @@
 
         const messaging = getMessaging();
 
+        //Custom function made to run firebase service 
+        getStartToken();
+
         function getStartToken() {
+            console.log("get start token called");
             getToken()
                 .then((currentToken) => {
                     if (currentToken) {
