@@ -35,8 +35,23 @@
 
         const messaging = getMessaging();
 
-        //Custom function made to run firebase service 
-        getStartToken();
+        function sendTokenToServer(token) {
+            // to do if token need to be send to server
+        }
+
+        function RequestPermission() {
+            messaging.requestPermission()
+                .then((permission) => {
+                    if (permission === 'granted') {
+                        console.log("have Permission");
+                        //calls method again and to sent token to server
+                        getStartToken();
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
 
         function getStartToken() {
             console.log("get start token called");
@@ -57,27 +72,12 @@
                 });
         }
 
-        function sendTokenToServer(token) {
-            // to do if token need to be send to server
-        }
-
-        function RequestPermission() {
-            messaging.requestPermission()
-                .then((permission) => {
-                    if (permission === 'granted') {
-                        console.log("have Permission");
-                        //calls method again and to sent token to server
-                        getStartToken();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        }
-
         onMessage(messaging, function (payload) {
             console.log("on Message", payload);
         });
+
+        //Custom function made to run firebase service 
+        getStartToken();
 
     </script>
 </body>
