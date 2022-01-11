@@ -1,7 +1,9 @@
-importScripts('https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js')
-importScripts('https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js')
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
+import { getMessaging } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+import { onBackgroundMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging-sw.js";
 
-var firebaseConfig = {
+
+const firebaseConfig = {
     apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
     authDomain: "csp-fcm.firebaseapp.com",
     projectId: "csp-fcm",
@@ -9,21 +11,20 @@ var firebaseConfig = {
     messagingSenderId: "1063903322339",
     appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
 };
+const firebaseApp = initializeApp(firebaseConfig);
 
-var app = firebase.initializeApp(firebaseConfig);
+const messaging = getMessaging(firebaseApp);
 
-var messaging = firebase.messaging();
-
-messaging.setBackgroundMessageHandler(function (payload) {
+onBackgroundMessage(messaging, (payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    const notification = JSON.parse(payload.data.notification);
     // Customize notification here
-    const notificationTitle = notification.title;
+    const notificationTitle = 'Background Message Title';
     const notificationOptions = {
-        body: notification.body,
-        icon: notification.icon
+        body: 'Background Message body.',
+        icon: '/firebase-logo.png'
     };
 
-    return self.registration.showNotification(notificationTitle,
+    self.registration.showNotification(notificationTitle,
         notificationOptions);
 });
+
