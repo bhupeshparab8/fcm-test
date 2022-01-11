@@ -6,22 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Push Notification</title>
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
 </head>
 
 <body>
     <h1>Web Push Notification</h1>
 
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+    <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
-
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
+    <script>
+        var firebaseConfig = {
             apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
             authDomain: "csp-fcm.firebaseapp.com",
             projectId: "csp-fcm",
@@ -30,56 +26,36 @@
             appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        var app = firebase.initializeApp(firebaseConfig);
 
-        const messaging = getMessaging();
+        var messaging = firebase.messaging();
 
-        function sendTokenToServer(token) {
-            // to do if token need to be send to server
-        }
-
-        function RequestPermission() {
-            messaging.requestPermission()
-                .then((permission) => {
-                    if (permission === 'granted') {
-                        console.log("have Permission");
-                        //calls method again and to sent token to server
-                        getStartToken();
-                    }
+        function initFirebaseMessagingRegistration() {
+            messaging
+                .requestPermission()
+                .then(function (permission) {
+                    //messageElement.innerHTML = "Got notification permission";
+                    console.log("Got notification permission", permission);
+                    return messaging.getToken();
                 })
-                .catch((err) => {
-                    console.log(err);
+                .then(function (token) {
+                    // print the token on the HTML page
+                    //tokenElement.innerHTML = "Token is " + token;
+                    console.log("Token is " + token);
                 })
-        }
-
-        function getStartToken() {
-            console.log("get start token called");
-            getToken(messaging, { "vapidKey": "BG9ff0wgZhb8StMVABPrsW55rzYQoY1xZYfpkO5VvWS3EnKlYwcjnJAVbaVHQReWrVPi2zFOLGf242ad8sq9MBk" })
-                .then((currentToken) => {
-                    if (currentToken) {
-                        //sendTokenToServer(currentToken);
-                        console.log("generated token=>", currentToken)
-                    }
-                    else {
-                        // Show permission request.
-                        RequestPermission();
-                        //setTokenSentToServer(false);
-                    }
-                }).catch((err) => {
-                    console.error("getStartToken error=>", err)
-                    //setTokenSentToServer(false);
+                .catch(function (err) {
+                    //errorElement.innerHTML = "Error: " + err;
+                    console.error("Error: " + err);
+                    console.log("Didn't get notification permission", err);
                 });
         }
 
-        onMessage(messaging, function (payload) {
-            console.log("on Message", payload);
+        messaging.onMessage(function (payload) {
+            console.log("Message received. ", JSON.stringify(payload));
+            //notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
         });
-
-        //Custom function made to run firebase service 
-        getStartToken();
-
     </script>
+
 </body>
 
 </html>
