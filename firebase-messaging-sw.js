@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js')
-importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js')
+importScripts('https://www.gstatic.com/firebasejs/7.14.6/firebase-app.js')
+importScripts('https://www.gstatic.com/firebasejs/7.14.6/firebase-messaging.js')
 
 var firebaseConfig = {
     apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
@@ -12,9 +12,9 @@ var firebaseConfig = {
 
 var app = firebase.initializeApp(firebaseConfig);
 
-var messaging = firebase.messaging(app);
+var messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function (payload) {
+messaging.setBackgroundMessagingHandler(function (payload) {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
     const notification = JSON.parse(payload.data.notification);
     // Customize notification here
