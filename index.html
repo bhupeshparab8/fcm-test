@@ -15,13 +15,10 @@
 
     <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
-    <script type="module">
-
-        
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
-        import { getMessaging, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
-        import { Init } from "./init.js";
-
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+    
+    <script>
         var firebaseConfig = {
             apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
             authDomain: "csp-fcm.firebaseapp.com",
@@ -31,16 +28,42 @@
             appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
         };
 
-        var app = initializeApp(firebaseConfig);
+        var app = firebase.initializeApp(firebaseConfig);
 
-        var messaging = getMessaging();
+        var messaging = firebase.messaging();
 
-        onMessage(messaging, (payload) => {
+        function initFirebaseMessagingRegistration() {
+            navigator
+                .serviceWorker
+                .register('./firebase-messaging-sw.js')
+                .then((registration) => {
+                    messaging.useServiceWorker(registration);
+
+                    messaging
+                        .requestPermission()
+                        .then(function (permission) {
+                            //messageElement.innerHTML = "Got notification permission";
+                            console.log("Got notification permission", permission);
+                            return messaging.getToken();
+                        })
+                        .then(function (token) {
+                            // print the token on the HTML page
+                            //tokenElement.innerHTML = "Token is " + token;
+                            console.log("Token is " + token);
+                        })
+                        .catch(function (err) {
+                            //errorElement.innerHTML = "Error: " + err;
+                            console.error("Error: " + err);
+                            console.log("Didn't get notification permission", err);
+                        });
+                })
+
+        }
+
+        messaging.onMessage(function (payload) {
             console.log("Message received. ", JSON.stringify(payload));
             //notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
         });
-
-        var initFirebaseMessagingRegistration = Init();
 
     </script>
 
