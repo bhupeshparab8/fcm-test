@@ -16,7 +16,8 @@
     <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
     <script type="module">
-
+        
+        import { Init } from "./init.js"
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
 
@@ -38,27 +39,7 @@
             //notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
         });
 
-        var initFirebaseMessagingRegistration = () => {
-            navigator
-                .serviceWorker
-                .register('./firebase-messaging-sw.js')
-                .then((registration) => {
-                    messaging.useServiceWorker(registration);
-
-                    getToken(messaging)
-                        .then(function (token) {
-                            // print the token on the HTML page
-                            //tokenElement.innerHTML = "Token is " + token;
-                            console.log("Token is " + token);
-                        })
-                        .catch(function (err) {
-                            //errorElement.innerHTML = "Error: " + err;
-                            console.error("Error: " + err);
-                            console.log("Didn't get notification permission", err);
-                        });
-                })
-
-        }
+        var initFirebaseMessagingRegistration = Init();
 
     </script>
 
