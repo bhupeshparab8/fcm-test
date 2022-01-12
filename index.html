@@ -16,7 +16,7 @@
     <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
     <script type="module">
-        
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
 
@@ -38,7 +38,7 @@
             //notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
         });
 
-        function initFirebaseMessagingRegistration() {
+        var initFirebaseMessagingRegistration = () => {
             navigator
                 .serviceWorker
                 .register('./firebase-messaging-sw.js')
