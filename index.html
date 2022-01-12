@@ -16,10 +16,11 @@
     <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
     <script type="module">
+
         
-        import { Init } from "./init.js"
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+        import { getMessaging, onMessage } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-messaging.js";
+        import { Init } from "./init.js";
 
         var firebaseConfig = {
             apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
