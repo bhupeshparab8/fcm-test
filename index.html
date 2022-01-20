@@ -15,11 +15,11 @@
 
     <button onclick="initFirebaseMessagingRegistration()">Enable Firebase Messaging</button>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
-    
-    <script>
-        var firebaseConfig = {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js";
+        import { getMessaging, onMessage, getToken } from "https://www.gstatic.com/firebasejs/9.6.3/firebase-messaging.js";
+
+        const firebaseConfig = {
             apiKey: "AIzaSyDRVMFWfoV5vgEI82Qy0jbIOT-q9ZyTWTQ",
             authDomain: "csp-fcm.firebaseapp.com",
             projectId: "csp-fcm",
@@ -28,24 +28,20 @@
             appId: "1:1063903322339:web:72f81dfb12fbb4c991a5d6"
         };
 
-        var app = firebase.initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
 
-        var messaging = firebase.messaging();
+        const messaging = getMessaging(firebaseApp);
 
         function initFirebaseMessagingRegistration() {
             navigator
                 .serviceWorker
                 .register('./firebase-messaging-sw.js')
                 .then((registration) => {
-                    messaging.useServiceWorker(registration);
-
-                    messaging
-                        .requestPermission()
-                        .then(function (permission) {
-                            //messageElement.innerHTML = "Got notification permission";
-                            console.log("Got notification permission", permission);
-                            return messaging.getToken();
-                        })
+                    const tokenOption = {
+                        "vapidKey": "BG9ff0wgZhb8StMVABPrsW55rzYQoY1xZYfpkO5VvWS3EnKlYwcjnJAVbaVHQReWrVPi2zFOLGf242ad8sq9MBk",
+                        "serviceWorkerRegistration": registration
+                    }
+                    getToken(messaging, tokenOption)
                         .then(function (token) {
                             // print the token on the HTML page
                             //tokenElement.innerHTML = "Token is " + token;
@@ -60,7 +56,7 @@
 
         }
 
-        messaging.onMessage(function (payload) {
+        onMessage(messaging, function (payload) {
             console.log("Message received. ", JSON.stringify(payload));
             //notificationElement.innerHTML = notificationElement.innerHTML + " " + payload.data.notification;
         });
