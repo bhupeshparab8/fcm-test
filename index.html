@@ -32,7 +32,7 @@
 
         const messaging = getMessaging();
 
-        function initFirebaseMessagingRegistration() {
+        window.initFirebaseMessagingRegistration = () => {
             navigator
                 .serviceWorker
                 .register('./firebase-messaging-sw.js')
